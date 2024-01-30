@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     private float movementX;
     private float movementY;
 
+    private bool isGrounded;
+    private bool wasGroundedLastFrame;
+
     // Speed at which the player moves.
     public float speed = 0;
 
@@ -56,11 +59,28 @@ public class PlayerController : MonoBehaviour
     // FixedUpdate is called once per fixed frame-rate frame.
     private void FixedUpdate()
     {
-        // Create a 3D movement vector using the X and Y inputs.
-        Vector3 movement = new Vector3(movementX, 0.0f, movementY);
 
-        // Apply force to the Rigidbody to move the player.
-        rb.AddForce(movement * speed);
+        isGrounded = wasGroundedLastFrame;
+
+        if (isGrounded)
+        {
+            // Only allow movement if the player is grounded.
+            // Create a 3D movement vector using the X and Y inputs.
+            Vector3 movement = new Vector3(movementX, 0.0f, movementY);
+
+            // Apply force to the Rigidbody to move the player.
+            rb.AddForce(movement * speed);
+        }
+        // Reset the wasGroundedLastFrame for the next frame.
+        wasGroundedLastFrame = false;
+    }
+    private void OnCollisionStay(Collision collision)
+    {
+        // Check if the player is colliding with the ground.
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            wasGroundedLastFrame = true;
+        }
     }
 
 
@@ -87,7 +107,7 @@ public class PlayerController : MonoBehaviour
         countText.text = "Count: " + count.ToString();
 
         // Check if the count has reached or exceeded the win condition.
-        if (count >= 57)
+        if (count >= 24)
         {
             // Display the win text.
             winTextObject.SetActive(true);
