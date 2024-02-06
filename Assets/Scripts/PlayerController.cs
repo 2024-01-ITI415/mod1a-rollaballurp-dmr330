@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
 
         // Initially set the win text to be inactive.
         winTextObject.SetActive(false);
+
     }
 
     // This function is called when a move input is detected.
@@ -72,7 +73,7 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(movement * speed);
         }
         // Reset the wasGroundedLastFrame for the next frame.
-        wasGroundedLastFrame = false;
+        wasGroundedLastFrame = true;
     }
     private void OnCollisionStay(Collision collision)
     {
